@@ -81,7 +81,7 @@ use clova_webhook_utils::{RequestData, RequestDataStruct, ResponseData, Response
 
 ### step 2.
 
-e = lambda_http::Request::Body;
+e is lambda_http::Request::Body;
 
 
 ```
