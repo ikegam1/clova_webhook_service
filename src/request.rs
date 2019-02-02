@@ -1,66 +1,66 @@
 //==== Request
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RequestDataStruct {
-    version: String,
+    pub version: String,
     #[serde(default)]
-    session: serde_json::Value,
+    pub session: serde_json::Value,
     #[serde(default)]
-    context: serde_json::Value,
+    pub context: serde_json::Value,
     #[serde(default)]
-    request: serde_json::Value
+    pub request: serde_json::Value
 }
 
 pub trait RequestData {
-    fn get_session(&self) -> Result<&serde_json::Value, String>;
-    fn get_context(&self) -> Result<&serde_json::Value, String>;
-    fn get_request(&self) -> Result<&serde_json::Value, String>;
-    fn get_request_type(&self) -> String;
-    fn get_intent_name(&self) -> String;
-    fn get_slots(&self) -> Result<&serde_json::Value, String>;
-    fn get_session_attributes(&self) -> Result<&serde_json::Value, String>;
+    pub fn get_session(&self) -> Result<&serde_json::Value, String>;
+    pub fn get_context(&self) -> Result<&serde_json::Value, String>;
+    pub fn get_request(&self) -> Result<&serde_json::Value, String>;
+    pub fn get_request_type(&self) -> String;
+    pub fn get_intent_name(&self) -> String;
+    pub fn get_slots(&self) -> Result<&serde_json::Value, String>;
+    pub fn get_session_attributes(&self) -> Result<&serde_json::Value, String>;
 }
 
 impl RequestData for RequestDataStruct {
-    fn get_session(&self) -> Result<&serde_json::Value, String>{
+    pub fn get_session(&self) -> Result<&serde_json::Value, String>{
         match &self.session.is_object(){
             false => Err("session is empty".to_string()),
             _ => Ok(&self.session)
         }
     }
-    fn get_context(&self) -> Result<&serde_json::Value, String>{
+    pub fn get_context(&self) -> Result<&serde_json::Value, String>{
         match &self.context.is_object(){
             false => Err("context is empty".to_string()),
             _ => Ok(&self.context)
         }
     }
-    fn get_request(&self) -> Result<&serde_json::Value, String>{
+    pub fn get_request(&self) -> Result<&serde_json::Value, String>{
         match &self.request.is_object(){
             false => Err("request is empty".to_string()),
             _ => Ok(&self.request)
         }
     }
-    fn get_request_type(&self) -> String{
+    pub fn get_request_type(&self) -> String{
         let e = "unknown type";
         let s = serde_json::to_string(&self.request.get("type")).expect(e);
         let mut ss = s.split("\"");
         ss.next().expect(e);
         ss.next().expect(e).to_string()
     }
-    fn get_intent_name(&self) -> String{
+    pub fn get_intent_name(&self) -> String{
         let e = "unknown intent name";
         let s = serde_json::to_string(&self.request["intent"]["name"]).expect(e);
         let mut ss = s.split("\"");
         ss.next().expect(e);
         ss.next().expect(e).to_string()
     }
-    fn get_slots(&self) -> Result<&serde_json::Value, String>{
+    pub fn get_slots(&self) -> Result<&serde_json::Value, String>{
         match &self.request.pointer("/intent/slots"){
             None => Err("slots is empty".to_string()),
             _ => Ok(&self.request["intent"]["slots"])
         }
     }
 
-    fn get_session_attributes(&self) -> Result<&serde_json::Value, String>{
+    pub fn get_session_attributes(&self) -> Result<&serde_json::Value, String>{
         match &self.session.pointer("/sessionAttributes"){
             None => Err("sessionAttributes is empty".to_string()),
             _ => Ok(&self.session["sessionAttributes"])
