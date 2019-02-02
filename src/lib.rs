@@ -6,3 +6,4 @@ extern crate serde_json;
 pub mod request;
 pub mod response;
 
+pub use crate::{request::RequestData, request::RequestDataStruct, response::ResponseData, response::ResponseDataStruct};

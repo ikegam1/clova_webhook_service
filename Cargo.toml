@@ -1,6 +1,6 @@
 [package]
 name = "clova_webhook_utils"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["takesiba.masrao"]
 edition = "2018"
 description = "Clova connect webhook with lambda "
