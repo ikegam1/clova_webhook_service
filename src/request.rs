@@ -40,15 +40,15 @@ impl RequestData for RequestDataStruct {
         }
     }
     fn get_request_type(&self) -> String{
-        let e = "unknown type";
-        let s = serde_json::to_string(&self.request.get("type")).expect(e);
+        let e = "\"unknown type\"";
+        let s = serde_json::to_string(&self.request.get("type")).unwrap_or(e);
         let mut ar = s.split("\"");
         ar.next().expect(e);
         ar.next().expect(e).to_string()
     }
     fn get_intent_name(&self) -> String{
-        let e = "unknown intent name";
-        let s = serde_json::to_string(&self.request["intent"]["name"]).expect(e);
+        let e = "\"unknown intent name\"";
+        let s = serde_json::to_string(&self.request["intent"]["name"]).unwrap_or(e);
         let mut ar = s.split("\"");
         ar.next().expect(e);
         ar.next().expect(e).to_string()
