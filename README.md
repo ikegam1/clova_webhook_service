@@ -64,3 +64,38 @@ fn handler(e: Request, _c: Context) -> Result<Response<Body>, HandlerError> {
 }
 ```
 
+## Examples repository
+
+### with serverless framework
+
+https://github.com/ikegam1/clova-lambdaonrust-kamefood
+
+## steps
+
+### step 1.
+
+
+```
+use clova_webhook_utils::{RequestData, RequestDataStruct, ResponseData, ResponseDataStruct};
+```
+
+### step 2.
+
+e = lambda_http::Request::Body;
+
+
+```
+let req: RequestDataStruct =  serde_json::from_slice(e.body().as_ref()).unwrap();
+```
+
+### step 3.
+
+
+```
+let mut res: ResponseDataStruct =  ResponseDataStruct::new().unwrap();
+res.set_simple_speech_text(speech, end);
+```
+
+### step 4.
+
+return.
