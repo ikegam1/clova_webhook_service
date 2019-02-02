@@ -40,18 +40,18 @@ impl RequestData for RequestDataStruct {
         }
     }
     fn get_request_type(&self) -> String{
-        let e = "\"unknown type\"";
-        let s = serde_json::to_string(&self.request.get("type")).unwrap_or(e);
+        let e = "unknown type";
+        let s = serde_json::to_string(&self.request.get("type")).unwrap_or(e.to_string());
         let mut ar = s.split("\"");
         ar.next().expect(e);
-        ar.next().expect(e).to_string()
+        ar.next().unwrap_or(e).to_string()
     }
     fn get_intent_name(&self) -> String{
-        let e = "\"unknown intent name\"";
-        let s = serde_json::to_string(&self.request["intent"]["name"]).unwrap_or(e);
+        let e = "unknown intent name";
+        let s = serde_json::to_string(&self.request["intent"]["name"]).unwrap_or(e.to_string());
         let mut ar = s.split("\"");
         ar.next().expect(e);
-        ar.next().expect(e).to_string()
+        ar.next().unwrap_or(e).to_string()
     }
     fn get_slots(&self) -> Result<&serde_json::Value, String>{
         match &self.request.pointer("/intent/slots"){
@@ -130,4 +130,56 @@ mod tests {
         assert_eq!("hello", req.get_slots().unwrap().pointer("/hello/name").unwrap());
         assert_eq!(1, req.get_session_attributes().unwrap().pointer("/a").unwrap().as_i64().unwrap());
     }
+
+    #[test]
+    fn request_test2nd() {
+        let data = r#"
+	{
+	    "version": "1.0",
+	    "session": {
+		"sessionId": "xxxxxxxx",
+		"sessionAttributes": {"a": 1 },
+		"user": {
+		    "userId": "xxxxxxxx",
+		    "accessToken": "xxxxxxx"
+		},
+		"new": true
+	    },
+	    "context": {
+		"System": {
+		    "application": {
+			"applicationId": "xxxxxxxx"
+		    },
+		    "user": {
+			"userId": "xxxxxxxx",
+			"accessToken": "xxxxxxxx"
+		    },
+		    "device": {
+			"deviceId": "xxxxxxxx",
+			"display": {
+			    "size": "l100",
+			    "orientation": "landscape",
+			    "dpi": 96,
+			    "contentLayer": {
+				"width": 640,
+				"height": 360
+			    }
+			}
+		    }
+		}
+	    },
+            "request": {
+                "type": "SessionEndedRequest",
+                "reason": "USER_INITIATED"
+            }
+	}
+	"#;
+        let req: RequestDataStruct = serde_json::from_str(data).unwrap();
+        assert_eq!("SessionEndedRequest", req.get_request_type());
+        assert_eq!("unknown intent name", req.get_intent_name());
+    }
+
+
+
+
 }
