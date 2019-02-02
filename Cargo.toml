@@ -1,0 +1,18 @@
+[package]
+name = "clova_webhook_service"
+version = "0.0.1"
+authors = ["takesiba.masrao"]
+edition = "2018"
+description = "Clova connect webhook with lambda "
+homepage = "https://github.com/ikegam1/clova-webhook-service"
+documentation = "https://qiita.com/7e06ab53701ed48a03e1"
+keywords = ["Clova", "Lambda"]
+license = "Apache-2.0"
+repository = "https://github.com/ikegam1/clova-webhook-service"
+
+[dependencies]
+log = "^0.4"
+simple_logger = "^1"
+serde = "^1.0"
+serde_derive = "^1.0"
+serde_json = "^1.0"
